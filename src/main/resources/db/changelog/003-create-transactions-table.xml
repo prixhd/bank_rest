@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="003-create-transactions-table" author="developer">
+        <comment>Создание таблицы транзакций</comment>
+
+        <createTable tableName="transactions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from_card_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_card_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DECIMAL(15,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="status" type="VARCHAR(20)" defaultValue="COMPLETED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="transactions"
+                baseColumnNames="from_card_id"
+                constraintName="fk_transactions_from_card_id"
+                referencedTableName="cards"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="transactions"
+                baseColumnNames="to_card_id"
+                constraintName="fk_transactions_to_card_id"
+                referencedTableName="cards"
+                referencedColumnNames="id"/>
+
+        <createIndex tableName="transactions" indexName="idx_transactions_from_card">
+            <column name="from_card_id"/>
+        </createIndex>
+
+        <createIndex tableName="transactions" indexName="idx_transactions_to_card">
+            <column name="to_card_id"/>
+        </createIndex>
+
+        <createIndex tableName="transactions" indexName="idx_transactions_date">
+            <column name="transaction_date"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

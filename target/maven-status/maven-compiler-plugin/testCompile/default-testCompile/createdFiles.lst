@@ -1,0 +1,3 @@
+com/example/bankcards/controller/AuthControllerTest.class
+com/example/bankcards/util/CardNumberGeneratorTest.class
+com/example/bankcards/service/CardServiceTest.class
